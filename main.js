@@ -1,10 +1,19 @@
 let cart = [];
 
+function setupEventListeners() {
+    document.querySelector('#details-modal .close').addEventListener('click', closeDetails);
+    document.querySelector('#cart-modal .close').addEventListener('click', closeCart);
+}
+
 function showDetails(title, description, price, imageUrl) {
+    // Сначала устанавливаем данные в модальное окно
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-description').innerText = description;
     document.getElementById('modal-price').innerText = price;
     document.getElementById('modal-image').src = imageUrl;
+
+    // Потом вызываем addToCart()
+    addToCart();
     document.getElementById('details-modal').style.display = 'block';
 }
 
@@ -19,7 +28,6 @@ function addToCart() {
     let price = document.getElementById('modal-price').innerText;
     let imageUrl = document.getElementById('modal-image').src;
 
-    // Проверяем, есть ли уже такой товар в корзине
     let existingItem = cart.find(item => item.title === title);
     if (existingItem) {
         existingItem.quantity += parseInt(quantity);
@@ -28,40 +36,34 @@ function addToCart() {
             title: title,
             quantity: parseInt(quantity),
             price: parseInt(price),
-            imageUrl: imageUrl // Сохраняем imageUrl в объект корзины
+            imageUrl: imageUrl
         });
     }
 
     closeDetails();
 }
 
+// Открывает корзину и отображает товары в ней
 function openCart() {
-    let cartItems = document.getElementById('cart-items');
-    cartItems.innerHTML = '';
+    let cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = ''; // Очищаем контейнер
 
     let totalPrice = 0;
     cart.forEach(item => {
-        totalPrice += item.price * item.quantity;
         let cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item'); // Добавляем класс для стилизации
+        cartItem.classList.add('cart-item');
 
-        // Создаем изображение товара в корзине
         let itemImage = document.createElement('img');
         itemImage.src = item.imageUrl;
         itemImage.alt = item.title;
-        itemImage.style.maxWidth = '50px'; // Можно задать другие стили для изображения
-        itemImage.style.borderRadius = '5px';
-        itemImage.style.marginRight = '10px';
+        itemImage.style.maxWidth = '50px'; // Пример стилей для изображения
 
-        // Создаем блок информации о товаре
         let itemInfo = document.createElement('div');
-        itemInfo.classList.add('cart-item-info'); // Добавляем класс для стилизации
+        itemInfo.classList.add('cart-item-info');
 
-        // Создаем заголовок (название товара)
         let itemTitle = document.createElement('h4');
         itemTitle.innerText = item.title;
 
-        // Создаем количество товара и кнопки управления количеством
         let itemQuantity = document.createElement('span');
         itemQuantity.innerText = ` x ${item.quantity}`;
 
@@ -70,18 +72,15 @@ function openCart() {
         removeOneButton.addEventListener('click', function() {
             removeOneFromCart(item.title);
         });
-        removeOneButton.classList.add('cart-button'); // Добавление класса "cart-button"
-        document.body.appendChild(removeOneButton);
+        removeOneButton.classList.add('cart-button');
 
         let removeAllButton = document.createElement('button');
         removeAllButton.innerText = 'Убрать все';
         removeAllButton.addEventListener('click', function() {
             removeAllFromCart(item.title);
         });
-        removeAllButton.classList.add('cart-button'); // Добавление класса "cart-button"
-        document.body.appendChild(removeAllButton);
+        removeAllButton.classList.add('cart-button');
 
-        // Собираем все элементы вместе
         itemInfo.appendChild(itemTitle);
         itemInfo.appendChild(itemQuantity);
         itemInfo.appendChild(removeOneButton);
@@ -90,19 +89,18 @@ function openCart() {
         cartItem.appendChild(itemImage);
         cartItem.appendChild(itemInfo);
 
-        cartItems.appendChild(cartItem);
+        cartItemsContainer.appendChild(cartItem);
+
+        // Подсчитываем общую стоимость
+        totalPrice += item.price * item.quantity;
     });
 
+    // Обновляем общую стоимость
     document.getElementById('total-price').innerText = totalPrice;
-    document.getElementById('cart-modal').style.display = "block";
 }
 
 function closeCart() {
     document.getElementById('cart-modal').style.display = "none";
-}
-
-function proceedToCheckout() {
-    window.location.href = 'checkout.html';
 }
 
 function decreaseQuantity() {
@@ -117,11 +115,11 @@ function increaseQuantity() {
     quantityInput.value = parseInt(quantityInput.value) + 1;
 }
 
-document.querySelectorAll('.item').forEach(item => {
-    item.addEventListener('click', function() {
-        const title = this.querySelector('h4').innerText;
-        const description = this.getAttribute('data-description');
-        const price = this.querySelector('span').innerText.replace(' ₽', '');
+document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const title = this.querySelector('h3').innerText;
+        const description = this.querySelector('p').innerText;
+        const price = this.querySelector('.price').innerText.replace('р', '').trim();
         const imageUrl = this.querySelector('img').src;
         showDetails(title, description, price, imageUrl);
     });
@@ -143,20 +141,16 @@ document.getElementById('cart-link').addEventListener('click', function(e) {
     openCart();
 });
 
-function removeFromCart(title) {
-    cart = cart.filter(item => item.title !== title);
-    openCart(); // Обновляем отображение корзины
-}
-
+// Убирает одну единицу товара из корзины
 function removeOneFromCart(title) {
-    let item = cart.find(item => item.title === title);
-    if (item) {
-        item.quantity -= 1;
-        if (item.quantity === 0) {
-            cart = cart.filter(item => item.title !== title);
+    let itemIndex = cart.findIndex(item => item.title === title);
+    if (itemIndex !== -1) {
+        cart[itemIndex].quantity--;
+        if (cart[itemIndex].quantity === 0) {
+            cart.splice(itemIndex, 1); // Удаляем товар из корзины, если количество стало нулевым
         }
     }
-    openCart(); // Обновляем отображение корзины
+    openCart(); // После изменений в корзине обновляем отображение
 }
 
 function removeAllFromCart(title) {
@@ -164,7 +158,22 @@ function removeAllFromCart(title) {
     openCart(); // Обновляем отображение корзины
 }
 
+// Очищает корзину полностью
+function clearCart() {
+    cart = [];
+    openCart(); // После очистки корзины обновляем отображение
+}
+
+// Переход к оформлению заказа
 function proceedToCheckout() {
     localStorage.setItem('cart', JSON.stringify(cart));
     window.location.href = 'checkout.html';
 }
+
+setupEventListeners();
+
+// Пример добавления обработчика для открытия корзины
+document.getElementById('cart-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    openCart();
+});
