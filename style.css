@@ -350,6 +350,24 @@ section {
     background-color: #e0b538;
 }
 
+.cart-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f2c94c; /* Жёлтый цвет */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+.cart-button:hover {
+    background-color: #e0b538; /* Тёмно-жёлтый при наведении */
+}
+
 .add-to-cart {
     display: inline-block;
     padding: 10px 20px;
