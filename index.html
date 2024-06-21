@@ -14,7 +14,7 @@
                     <a href="index.html"><img src="image/logo.png" alt="Logo"></a>
                 </div>
                 <div class="header-buttons">
-                    <a href="sell.html" class="btn">Корзина</a>
+                    <a href="cart.html" class="btn">Корзина</a>
                 </div>
             </div>
     </header>
@@ -244,7 +244,229 @@
             </div>
         </div>
     </div>
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <div class="modal-details">
+                <h3>Корзина</h3>
+                <div id="cart-items"></div>
+                <p>Общая стоимость: <span id="total-price"></span> ₽</p>
+                <button class="close-cart" onclick="proceedToCheckout()">Перейти к оформлению</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let cart = [];
+
+// Функция для загрузки корзины из localStorage
+function loadCartFromStorage() {
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+        cart = JSON.parse(cartData);
+        openCart(); // Обновляем отображение корзины после загрузки из localStorage
+    }
+}
+
+// Функция для сохранения корзины в localStorage
+function saveCartToStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function setupEventListeners() {
+    document.querySelector('#details-modal .close').addEventListener('click', closeDetails);
+    document.querySelector('#cart-modal .close').addEventListener('click', closeCart);
+}
+
+function setupModalEventListeners() {
+    document.getElementById('details-modal').querySelector('.btn').addEventListener('click', addToCart);
+}
+
+function showDetails(title, description, price, imageUrl) {
+    // Сначала устанавливаем данные в модальное окно
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-description').innerText = description;
+    document.getElementById('modal-price').innerText = price;
+    document.getElementById('modal-image').src = imageUrl;
+
+    // Отображаем модальное окно
+    document.getElementById('details-modal').style.display = 'block';
+
+    // Добавляем обработчики событий к кнопкам в модальном окне
+    setupModalEventListeners();
+}
+
+function closeDetails() {
+    document.getElementById('details-modal').style.display = 'none';
+    document.getElementById('quantity').value = 1; // Reset the quantity to 1
+
+    saveCartToStorage(); // Сохраняем корзину в localStorage после изменений
+}
+
+function addToCart() {
+    let quantity = document.getElementById('quantity').value;
+    let title = document.getElementById('modal-title').innerText;
+    let price = document.getElementById('modal-price').innerText;
+    let imageUrl = document.getElementById('modal-image').src;
+
+    let existingItem = cart.find(item => item.title === title);
+    if (existingItem) {
+        existingItem.quantity += parseInt(quantity);
+    } else {
+        cart.push({
+            title: title,
+            quantity: parseInt(quantity),
+            price: parseInt(price),
+            imageUrl: imageUrl
+        });
+    }
+
+    saveCartToStorage(); // Сохраняем корзину в localStorage после добавления в корзину
+
+    closeDetails(); // Закрываем модальное окно после добавления в корзину
+}
+
+// Открывает корзину и отображает товары в ней
+function openCart() {
+    let cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = ''; // Очищаем контейнер
+
+    let totalPrice = 0;
+    cart.forEach(item => {
+        let cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+
+        let itemImage = document.createElement('img');
+        itemImage.src = item.imageUrl;
+        itemImage.alt = item.title;
+        itemImage.style.maxWidth = '50px'; // Пример стилей для изображения
+
+        let itemInfo = document.createElement('div');
+        itemInfo.classList.add('cart-item-info');
+
+        let itemTitle = document.createElement('h4');
+        itemTitle.innerText = item.title;
+
+        let itemQuantity = document.createElement('span');
+        itemQuantity.innerText = ` x ${item.quantity}`;
+
+        let removeOneButton = document.createElement('button');
+        removeOneButton.innerText = 'Убрать 1';
+        removeOneButton.addEventListener('click', function() {
+            removeOneFromCart(item.title);
+        });
+        removeOneButton.classList.add('cart-button');
+
+        let removeAllButton = document.createElement('button');
+        removeAllButton.innerText = 'Убрать все';
+        removeAllButton.addEventListener('click', function() {
+            removeAllFromCart(item.title);
+        });
+        removeAllButton.classList.add('cart-button');
+
+        itemInfo.appendChild(itemTitle);
+        itemInfo.appendChild(itemQuantity);
+        itemInfo.appendChild(removeOneButton);
+        itemInfo.appendChild(removeAllButton);
+
+        cartItem.appendChild(itemImage);
+        cartItem.appendChild(itemInfo);
+
+        cartItemsContainer.appendChild(cartItem);
+
+        // Подсчитываем общую стоимость
+        totalPrice += item.price * item.quantity;
+    });
+
+    // Обновляем общую стоимость
+    document.getElementById('total-price').innerText = totalPrice;
+}
+
+function closeCart() {
+    document.getElementById('cart-modal').style.display = "none";
+}
+
+function decreaseQuantity() {
+    let quantityInput = document.getElementById('quantity');
+    if (quantityInput.value > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+}
+
+function increaseQuantity() {
+    let quantityInput = document.getElementById('quantity');
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+}
+
+document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const title = this.querySelector('h3').innerText;
+        const description = this.querySelector('p').innerText;
+        const price = this.querySelector('.price').innerText.replace('р', '').trim();
+        const imageUrl = this.querySelector('img').src;
+        showDetails(title, description, price, imageUrl);
+    });
+});
+
+document.querySelectorAll('.main-nav a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Добавление обработчика для открытия корзины
+document.getElementById('cart-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    openCart();
+});
+
+// Убирает одну единицу товара из корзины
+function removeOneFromCart(title) {
+    let itemIndex = cart.findIndex(item => item.title === title);
+    if (itemIndex !== -1) {
+        cart[itemIndex].quantity--;
+        if (cart[itemIndex].quantity === 0) {
+            cart.splice(itemIndex, 1); // Удаляем товар из корзины, если количество стало нулевым
+        }
+    }
+    saveCartToStorage(); // Сохраняем корзину в localStorage после изменений
+    openCart(); // После изменений в корзине обновляем отображение
+}
+
+function removeAllFromCart(title) {
+    cart = cart.filter(item => item.title !== title);
+    saveCartToStorage(); // Сохраняем корзину в localStorage после изменений
+    openCart(); // Обновляем отображение корзины
+}
+
+// Очищает корзину полностью
+function clearCart() {
+    cart = []; // Очищаем массив корзины
+    saveCartToStorage(); // Сохраняем пустую корзину в localStorage
+    openCart(); // Обновляем отображение корзины на странице
+}
+
+// Переход к оформлению заказа
+function proceedToCheckout() {
+    // Clear the cart
+    clearCart();
+
+    // Display confirmation message
+    let confirmation = confirm("Ваш заказ оформлен! Хотите вернуться на главную страницу?");
     
+    if (confirmation) {
+        window.location.href = "index.html"; // Перенаправляем на главную страницу
+    }
+}
+setupEventListeners();
+
+// Загружаем корзину из localStorage при загрузке страницы
+window.addEventListener('load', loadCartFromStorage);
+
+    </script>
 
     <footer>
         <div class="footer-content">
