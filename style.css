@@ -1,0 +1,399 @@
+/* Общие стили для всего сайта */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #ffffff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+.header {
+    background-color: #ffffff;
+    color: #333;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.header-logo img {
+    max-height: 110px;
+}
+
+.header-buttons {
+    margin-left: auto;
+}
+
+footer {
+    background-color: #d2d2d2;
+    color: #333;
+    padding: 30px 0;
+    font-family: Arial, sans-serif; /* Указать ваш шрифт здесь */
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.footer {
+    flex: 1;
+    padding: 100px;
+}
+
+.footer h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    margin-bottom: 10px;
+}
+
+.footer ul li a {
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.footer ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer .hot-line ul li a:before {
+    content: "\260E\0020"; /* Unicode символ телефона */
+}
+
+.footer .feedback-service ul li a:before {
+    content: "\2709\0020"; /* Unicode символ письма */
+}
+
+.footer .download ul li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.footer .download ul li a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.footer .download ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 10px;
+    color: #333;
+    font-size: 12px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f2c94c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+    margin-top: 80px; /* Adjust margin to ensure it is below the fixed header */
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+section {
+    padding: 20px 0; /* Adjusted section padding */
+}
+
+.product-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.product-card {
+    flex: 0 1 calc(25% - 20px); /* Width of card - 25% minus the gap */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 400px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.product-card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 10px 0 5px 0;
+    text-align: left; /* Aligning title to the left */
+}
+
+.product-card p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    text-align: left; /* Aligning description to the left */
+}
+
+.product-card .price {
+    font-size: 1.25rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+.product-card .add-to-cart {
+    background-color: #f2c94c;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.product-card .add-to-cart:hover {
+    background-color: #e0b538;
+}
+
+/* Стили для модальных окон */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto; /* Уменьшаем отступ сверху и снизу */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%; /* Уменьшаем ширину до 20% от ширины экрана */
+    max-width: 600px; /* Максимальная ширина контейнера */
+    position: relative;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+}
+
+.modal-body img {
+    width: 150px; /* Ограничить максимальную ширину изображения */
+    height: 150px; /* Поддерживать соотношение сторон */
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.modal-body {
+    display: flex;
+    width: 100%;
+}
+
+.modal-body img {
+    max-width: 100%; /* Ограничить максимальную ширину изображения */
+    height: auto; /* Поддерживать соотношение сторон */
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.product-info {
+    width: 50%;
+    text-align: left;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.quantity-container button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f2c94c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    margin: 15px 55px;
+    font-size: 1.5rem;
+}
+
+.quantity-container button:hover {
+    background-color: #e0b538;
+}
+
+.quantity-container input {
+    width: 50px;
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.quantity-btn {
+    background-color: #f2c94c;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 20px;
+}
+
+.quantity-btn:hover {
+    background-color: #e0b538;
+}
+
+.add-to-cart {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f2c94c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    margin-left: 108px;
+}
+
+.add-to-cart:hover {
+    background-color: #e0b538;
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        flex: 0 1 calc(50% - 20px);
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 5% auto; /* Уменьшаем отступ сверху и снизу */
+    }
+
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .modal-body img {
+        max-width: 80%; /* Уменьшаем максимальную ширину изображения для мобильных устройств */
+        margin-bottom: 20px;
+    }
+
+    .product-info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        flex: 0 1 100%;
+    }
+}
+

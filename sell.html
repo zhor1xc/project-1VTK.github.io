@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="image/logo-1.png" type="image/x-icon">
+    <title>Корзина - БлинБери34</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="index.html"><img src="image/logo.png" alt="Logo"></a>
+            </div>
+            <div class="header-buttons">
+                <a href="index.html" class="btn">Главная</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Корзина</h2>
+        <div id="cart-items" class="cart-items">
+            <!-- Сюда будут добавляться товары в корзине динамически -->
+        </div>
+        <div class="checkout-summary">
+            <p>Общая стоимость: <span id="total-price">0</span> ₽</p>
+            <button class="btn checkout-btn" onclick="proceedToCheckout()">Оформить заказ</button>
+            <button class="btn clear-cart-btn" onclick="clearCart()">Очистить корзину</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer hot-line">
+                <h3>Горячая линия</h3>
+                <ul class="hot-line">
+                    <li><a href="tel:88005502220">8 (800) 550 22 20</a></li>
+                </ul>
+            </div>
+            <div class="footer feedback-service">
+                <h3>Служба обратной связи</h3>
+                <ul>
+                    <li><a href="mailto:ask@blinberry.team">ask@blinberry.team</a></li>
+                </ul>
+            </div>
+            <div class="footer download">
+                <h3>Скачай БлинБери на свой смартфон</h3>
+                <ul>
+                    <li><a href="https://apps.apple.com/ru/app/%D0%B1%D0%BB%D0%B8%D0%BD%D0%B1%D0%B5%D1%80%D0%B8/id1508294248">App store</a></li>
+                    <li><a href="https://play.google.com/store/apps/details?id=com.blinbery.client&hl=ru">Google play</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="main.js" async></script>
+</body>
+</html>
